@@ -1,0 +1,160 @@
+# Desafio---HairDay
+Projeto Rise UP
+
+import { useState } from "react";
+
+export default function App() {
+  const [appointments, setAppointments] = useState([]);
+  const [name, setName] = useState("");
+  const [service, setService] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  function handleAddAppointment(e) {
+    e.preventDefault();
+    if (!name || !service || !date || !time) {
+      alert("Preencha todos os campos!");
+      return;
+    }
+
+    const newAppointment = {
+      id: Date.now(),
+      name,
+      service,
+      date,
+      time,
+    };
+
+    setAppointments([...appointments, newAppointment]);
+    setName("");
+    setService("");
+    setDate("");
+    setTime("");
+  }
+
+  function handleRemoveAppointment(id) {
+    setAppointments(appointments.filter((a) => a.id !== id));
+  }
+
+  return (
+    <div style={styles.container}>
+      <h1 style={styles.title}>💇‍♀️ HairDay</h1>
+
+      {/* Formulário */}
+      <form onSubmit={handleAddAppointment} style={styles.form}>
+        <input
+          type="text"
+          placeholder="Nome do cliente"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Serviço"
+          value={service}
+          onChange={(e) => setService(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          style={styles.input}
+        />
+        <button type="submit" style={styles.button}>
+          Agendar
+        </button>
+      </form>
+
+      {/* Lista de Agendamentos */}
+      {appointments.length === 0 ? (
+        <p style={{ textAlign: "center" }}>Nenhum agendamento ainda 📅</p>
+      ) : (
+        <ul style={styles.list}>
+          {appointments.map((a) => (
+            <li key={a.id} style={styles.item}>
+              <div>
+                <strong>{a.name}</strong> — {a.service}
+                <br />
+                <span>
+                  {a.date} às {a.time}
+                </span>
+              </div>
+              <button
+                onClick={() => handleRemoveAppointment(a.id)}
+                style={styles.removeButton}
+              >
+                ✖
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+const styles = {
+  container: {
+    maxWidth: "500px",
+    margin: "40px auto",
+    padding: "20px",
+    background: "#fff",
+    borderRadius: "12px",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+    fontFamily: "sans-serif",
+  },
+  title: {
+    textAlign: "center",
+    color: "#e91e63",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    marginBottom: "20px",
+  },
+  input: {
+    padding: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "6px",
+  },
+  button: {
+    padding: "10px",
+    backgroundColor: "#e91e63",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+  list: {
+    listStyle: "none",
+    padding: 0,
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+  item: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "10px 14px",
+    borderRadius: "8px",
+    background: "#f8f8f8",
+    border: "1px solid #eee",
+  },
+  removeButton: {
+    background: "transparent",
+    border: "none",
+    fontSize: "16px",
+    color: "#e91e63",
+    cursor: "pointer",
+  },
+};
